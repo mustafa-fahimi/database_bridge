@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:database_bridge/database_bridge.dart';
+import 'package:database_bridge/sql/sqflite/database_bridge_sqflite_service_impl.dart';
 import 'package:sqflite/sqflite.dart';
 
 typedef SqfliteBatch = Batch;
@@ -9,6 +10,15 @@ typedef OnUpgrade = FutureOr<void> Function(Database, int, int)?;
 typedef OnDowngrade = FutureOr<void> Function(Database, int, int)?;
 
 abstract interface class DatabaseBridgeSqfliteService {
+  factory DatabaseBridgeSqfliteService({
+    required String databaseFileName,
+    ConflictAlgorithm defaultConflictAlgorithm = ConflictAlgorithm.ignore,
+  }) {
+    return DatabaseBridgeSqfliteServiceImpl(
+      databaseFileName: databaseFileName,
+      defaultConflictAlgorithm: defaultConflictAlgorithm,
+    );
+  }
 
   Future<JobDone> openSqliteDatabase({
     int databaseVersion = 1,

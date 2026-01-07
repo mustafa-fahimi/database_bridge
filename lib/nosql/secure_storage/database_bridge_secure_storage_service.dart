@@ -1,6 +1,10 @@
 import 'package:database_bridge/database_bridge.dart';
+import 'package:database_bridge/nosql/secure_storage/database_bridge_secure_storage_service_impl.dart';
 
 abstract interface class DatabaseBridgeSecureStorageService {
+  factory DatabaseBridgeSecureStorageService() {
+    return DatabaseBridgeSecureStorageServiceImpl();
+  }
 
   Future<JobDone> initialize();
 

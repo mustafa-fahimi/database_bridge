@@ -1,7 +1,11 @@
 import 'package:database_bridge/database_bridge.dart';
+import 'package:database_bridge/nosql/hive/database_bridge_hive_service_impl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract interface class DatabaseBridgeHiveService {
+  factory DatabaseBridgeHiveService() {
+    return DatabaseBridgeHiveServiceImpl();
+  }
 
   Future<JobDone> initializeDatabase();
 

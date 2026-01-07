@@ -1,7 +1,19 @@
+import 'dart:io';
+
 import 'package:database_bridge/common/job_done.dart';
+import 'package:database_bridge/nosql/objectbox/database_bridge_objectbox_service_impl.dart';
 import 'package:objectbox/objectbox.dart';
 
 abstract interface class DatabaseBridgeObjectboxService {
+  factory DatabaseBridgeObjectboxService({
+    Directory? storeDirectory,
+    Future<Store> Function(String directory)? storeFactory,
+  }) {
+    return DatabaseBridgeObjectboxServiceImpl(
+      storeDirectory: storeDirectory,
+      storeFactory: storeFactory,
+    );
+  }
 
   Future<JobDone> initializeStore();
 

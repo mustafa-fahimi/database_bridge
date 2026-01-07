@@ -1,8 +1,12 @@
+import 'package:database_bridge/sql/drift/database_bridge_drift_service_impl.dart';
 import 'package:drift/drift.dart';
 
 typedef BatchOperation = void Function(Batch batch);
 
 abstract interface class DatabaseBridgeDriftService {
+  factory DatabaseBridgeDriftService(GeneratedDatabase database) {
+    return DatabaseBridgeDriftServiceImpl(database);
+  }
 
   Future<List<D>> getAll<T extends Table, D>();
 
