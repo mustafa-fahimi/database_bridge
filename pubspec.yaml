@@ -1,7 +1,7 @@
 name: database_bridge
 description: A unified Flutter database service wrapper supporting SQL (Drift, Sqflite), NoSQL (Hive, ObjectBox), and secure storage with a consistent API
 
-version: 1.0.0
+version: 1.0.1
 
 repository: https://github.com/mustafa-fahimi/database_bridge
 homepage: https://github.com/mustafa-fahimi/database_bridge
