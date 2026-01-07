@@ -21,27 +21,37 @@ git push origin v[X.Y.Z]
 - Add release title and description
 - Publish the release
 
-### 4. Update CHANGELOG.md
+### 4. Update Version in pubspec.yaml
+- Bump the version number following semantic versioning (MAJOR.MINOR.PATCH)
+- Update the version field in pubspec.yaml
+
+### 5. Update CHANGELOG.md
 - Add new version entry at the top
 - Document all changes since last version
 - Follow semantic versioning (MAJOR.MINOR.PATCH)
 
-### 5. Authenticate with pub.dev
+### 6. Authenticate with pub.dev
 ```bash
 # Login to pub.dev (opens browser for Google authentication)
 dart pub login
 ```
 
-### 6. Publish to pub.dev
+### 7. Dry Run Test
+```bash
+# Test publishing without actually uploading
+dart pub publish --dry-run
+```
+
+### 8. Publish to pub.dev
 ```bash
 # Publish your package
 dart pub publish --server=https://pub.dev
 ```
 
-### 7. Verify Publication
-- Check https://pub.dev/packages/dio_bridge
+### 9. Verify Publication
+- Check https://pub.dev/packages/database_bridge
 - Verify version appears correctly
-- Test installation: `flutter pub add dio_bridge`
+- Test installation: `flutter pub add database_bridge`
 
 ## What Gets Published
 When you run `dart pub publish`, the following files are uploaded:
@@ -66,8 +76,10 @@ When you run `dart pub publish`, the following files are uploaded:
 - Account on https://pub.dev/
 - Repository hosted on GitHub
 - Valid pubspec.yaml with proper metadata
-- All tests passing
+- Code analysis clean (`flutter analyze`)
 - Documentation complete
+- CHANGELOG.md updated
+- Version properly bumped in pubspec.yaml
 
 ## Version Format
 - **MAJOR**: Breaking changes
