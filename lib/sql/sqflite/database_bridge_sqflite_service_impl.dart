@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
-class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
-  DBSWSqfliteServiceImplementation({
+class DatabaseBridgeSqfliteServiceImpl implements DatabaseBridgeSqfliteService {
+  DatabaseBridgeSqfliteServiceImpl({
     required this.databaseFileName,
     this.defaultConflictAlgorithm = ConflictAlgorithm.ignore,
   }) : assert(
@@ -40,7 +40,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
         return join(path, databaseFileName);
       }
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -73,7 +73,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -81,12 +81,12 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   Future<JobDone> closeSqliteDatabase() async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database object was null');
+        throw const DatabaseBridgeException(error: 'Database object was null');
       }
       await database!.close();
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -97,7 +97,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       await databaseFactory.deleteDatabase(databasePath);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -129,7 +129,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return queryResult;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -161,7 +161,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return queryResult.isNotEmpty ? queryResult.first : <String, Object?>{};
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -185,7 +185,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
         return false;
       }
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -211,7 +211,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
         return false;
       }
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -233,7 +233,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
         return false;
       }
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -243,7 +243,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       await database!.execute(sql, arguments);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -255,7 +255,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
     try {
       return await database!.rawQuery(sql, arguments);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -264,7 +264,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
     try {
       return await database!.rawInsert(sql, arguments);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -273,7 +273,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
     try {
       return await database!.rawUpdate(sql, arguments);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -282,7 +282,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
     try {
       return await database!.rawDelete(sql, arguments);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -292,7 +292,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       final result = await database!.rawQuery('SELECT COUNT(*) FROM $table');
       return Sqflite.firstIntValue(result) ?? 0;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -301,7 +301,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
     try {
       return await database!.transaction(action);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -314,7 +314,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final batch = database!.batch();
       operations(batch);
@@ -324,7 +326,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
         continueOnError: continueOnError,
       );
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -336,7 +338,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final result = await database!.rawQuery(
         'SELECT COUNT(*) as count FROM $table${where != null ? ' WHERE $where' : ''}',
@@ -344,7 +348,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return Sqflite.firstIntValue(result) ?? 0;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -357,7 +361,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final result = await database!.rawQuery(
         'SELECT SUM($column) as sum FROM $table${where != null ? ' WHERE $where' : ''}',
@@ -365,7 +371,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return result.isNotEmpty ? result.first['sum'] as double? : null;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -378,7 +384,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final result = await database!.rawQuery(
         'SELECT AVG($column) as avg FROM $table${where != null ? ' WHERE $where' : ''}',
@@ -386,7 +394,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return result.isNotEmpty ? result.first['avg'] as double? : null;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -399,7 +407,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final result = await database!.rawQuery(
         'SELECT MIN($column) as min FROM $table${where != null ? ' WHERE $where' : ''}',
@@ -407,7 +417,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return result.isNotEmpty ? result.first['min'] : null;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -420,7 +430,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
       final result = await database!.rawQuery(
         'SELECT MAX($column) as max FROM $table${where != null ? ' WHERE $where' : ''}',
@@ -428,7 +440,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
       );
       return result.isNotEmpty ? result.first['max'] : null;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -446,7 +458,9 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
   }) async {
     try {
       if (database == null) {
-        throw const DBSWException(error: 'Database is not initialized');
+        throw const DatabaseBridgeException(
+          error: 'Database is not initialized',
+        );
       }
 
       // Build SELECT clause with aggregations
@@ -485,7 +499,7 @@ class DBSWSqfliteServiceImplementation implements DBSWSqfliteService {
 
       return await database!.rawQuery(sql, whereArgs);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 }

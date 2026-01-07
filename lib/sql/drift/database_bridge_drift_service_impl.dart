@@ -1,9 +1,9 @@
-import 'package:database_service_wrapper/common/d_b_s_w_exception.dart';
-import 'package:database_service_wrapper/sql/drift/d_b_s_w_drift_service.dart';
+import 'package:database_bridge/common/database_bridge_exception.dart';
+import 'package:database_bridge/sql/drift/database_bridge_drift_service.dart';
 import 'package:drift/drift.dart';
 
-class DBSWDriftServiceImplementation implements DBSWDriftService {
-  const DBSWDriftServiceImplementation(this._database);
+class DatabaseBridgeDriftServiceImpl implements DatabaseBridgeDriftService {
+  const DatabaseBridgeDriftServiceImpl(this._database);
 
   final GeneratedDatabase _database;
 
@@ -14,7 +14,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final result = await _database.select(table).get();
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -29,7 +29,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       )..where(filter)).getSingleOrNull();
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -46,7 +46,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
           .insert(entity, mode: mode, onConflict: onConflict);
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -57,7 +57,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final result = await _database.update(table).replace(entity);
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -70,7 +70,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final result = await (_database.delete(table)..where(filter)).go();
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -79,7 +79,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
     try {
       await _database.close();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -102,7 +102,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return results;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -121,7 +121,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return results;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -134,7 +134,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final result = await (_database.delete(table)..where(filter)).go();
       return result;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -147,7 +147,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
         }
       });
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -157,7 +157,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final table = _getTable<T, D>();
       return _database.select(table).watch();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -169,7 +169,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final table = _getTable<T, D>();
       return (_database.select(table)..where(filter)).watch();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -181,7 +181,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final table = _getTable<T, D>();
       return (_database.select(table)..where(filter)).watchSingleOrNull();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -190,7 +190,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
     try {
       return await _database.transaction(action);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -207,7 +207,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       final result = await statement.get();
       return result as List<T>;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -219,7 +219,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
     try {
       return await _database.customUpdate(query, variables: variables ?? []);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -231,7 +231,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
     try {
       return await _database.customInsert(query, variables: variables ?? []);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -243,7 +243,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
     try {
       await _database.customStatement(query);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -274,7 +274,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
         table,
       )..where((_) => combinedFilter!)).get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -289,7 +289,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
         table,
       )..where((_) => column.isIn(values))).get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -304,7 +304,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
         table,
       )..where((_) => column.like(pattern))).get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -336,7 +336,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
             ..limit(1))
           .getSingleOrNull();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -363,7 +363,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return await query.get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -390,7 +390,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return await query.get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -416,7 +416,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return await query.get();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -439,7 +439,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return await query.getSingleOrNull();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -456,7 +456,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       if (results.isEmpty) return 0;
       return results.first.data['count'] as int? ?? 0;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -476,7 +476,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       if (results.isEmpty) return null;
       return results.first.data['sum'] as double?;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -496,7 +496,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       if (results.isEmpty) return null;
       return results.first.data['avg'] as double?;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -516,7 +516,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       if (results.isEmpty) return null;
       return results.first.data['min'];
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -536,7 +536,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
       if (results.isEmpty) return null;
       return results.first.data['max'];
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -583,7 +583,7 @@ class DBSWDriftServiceImplementation implements DBSWDriftService {
 
       return mappedResults;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 

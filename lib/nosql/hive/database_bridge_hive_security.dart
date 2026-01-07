@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// A class that handles the security of a NoSQL database by generating
 /// and storing an encryption key for AES data encryption.
 /// It uses FlutterSecureStorage to securely store the encryption key.
-class DBSWHiveSecurity {
+class DatabaseBridgeHiveSecurity {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   final String _secureKey = 'Y2xhc29y';
 
@@ -25,7 +25,7 @@ class DBSWHiveSecurity {
         await _writeSecureKey();
       }
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -51,7 +51,7 @@ class DBSWHiveSecurity {
         value: base64UrlEncode(_generateNewSecureKey()),
       );
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -59,7 +59,7 @@ class DBSWHiveSecurity {
     try {
       await _secureStorage.delete(key: _secureKey);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -94,10 +94,10 @@ class DBSWHiveSecurity {
         final encryptionKey = base64Url.decode(secureStorageKey);
         return HiveAesCipher(encryptionKey);
       } else {
-        throw const DBSWException(error: 'Secure key is null');
+        throw const DatabaseBridgeException(error: 'Secure key is null');
       }
     } catch (e) {
-      throw DBSWException(error: e.toString());
+      throw DatabaseBridgeException(error: e.toString());
     }
   }
 }

@@ -1,13 +1,14 @@
 import 'dart:io';
 
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-class DBSWHiveServiceImplementation implements DBSWHiveService {
-  DBSWHiveServiceImplementation();
-  final DBSWHiveSecurity _databaseSecurity = DBSWHiveSecurity();
+class DatabaseBridgeHiveServiceImpl implements DatabaseBridgeHiveService {
+  DatabaseBridgeHiveServiceImpl();
+  final DatabaseBridgeHiveSecurity _databaseSecurity =
+      DatabaseBridgeHiveSecurity();
 
   @override
   Future<JobDone> initializeDatabase() async {
@@ -18,7 +19,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       );
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -28,7 +29,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
           .getApplicationDocumentsDirectory();
       return Directory('${appDocumentDirectory.path}/clasor_database');
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -42,7 +43,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       );
       return box;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -52,7 +53,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await Hive.close();
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -64,7 +65,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.close();
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -73,12 +74,12 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
     try {
       final box = await openBox(boxName);
       if (box.containsKey(key)) {
-        throw const DBSWException(error: 'duplicate_key');
+        throw const DatabaseBridgeException(error: 'duplicate_key');
       }
       await box.put(key, value);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -92,7 +93,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.putAll(enteries);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -107,7 +108,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       final dbFetchResult = box.get(key, defaultValue: defaultValue);
       return dbFetchResult;
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -116,12 +117,12 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
     try {
       final box = await openBox(boxName);
       if (!box.containsKey(boxName)) {
-        throw const DBSWException(error: 'key_not_exist');
+        throw const DatabaseBridgeException(error: 'key_not_exist');
       }
       await box.put(key, value);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -132,7 +133,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.put(key, value);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -143,7 +144,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.delete(key);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -154,7 +155,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.deleteAll(keys);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -164,7 +165,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       final box = await openBox(boxName);
       return await box.clear();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -175,7 +176,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await box.deleteFromDisk();
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -187,7 +188,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       await _databaseSecurity.deleteSecureKey();
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -197,7 +198,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       final box = await openBox(boxName);
       return box.containsKey(key);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -210,7 +211,7 @@ class DBSWHiveServiceImplementation implements DBSWHiveService {
       Hive.registerAdapter<T>(adapter, override: override);
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 }

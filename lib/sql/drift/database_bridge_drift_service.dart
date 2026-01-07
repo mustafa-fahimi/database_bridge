@@ -2,8 +2,7 @@ import 'package:drift/drift.dart';
 
 typedef BatchOperation = void Function(Batch batch);
 
-abstract interface class DBSWDriftService {
-  const DBSWDriftService();
+abstract interface class DatabaseBridgeDriftService {
 
   Future<List<D>> getAll<T extends Table, D>();
 

@@ -1,18 +1,18 @@
-import 'package:database_service_wrapper/common/d_b_s_w_exception.dart';
-import 'package:database_service_wrapper/common/job_done.dart';
-import 'package:database_service_wrapper/nosql/secure_storage/d_b_s_w_secure_storage_service.dart';
+import 'package:database_bridge/common/database_bridge_exception.dart';
+import 'package:database_bridge/common/job_done.dart';
+import 'package:database_bridge/nosql/secure_storage/database_bridge_secure_storage_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class DBSWSecureStorageServiceImplementation
-    implements DBSWSecureStorageService {
-  DBSWSecureStorageServiceImplementation();
+class DatabaseBridgeSecureStorageServiceImpl
+    implements DatabaseBridgeSecureStorageService {
+  DatabaseBridgeSecureStorageServiceImpl();
 
   FlutterSecureStorage? _storage;
   bool _isInitialized = false;
 
   FlutterSecureStorage get _getStorage {
     if (!_isInitialized || _storage == null) {
-      throw DBSWException(
+      throw DatabaseBridgeException(
         error: 'SecureStorageService not initialized. Call initialize() first.',
       );
     }
@@ -24,7 +24,7 @@ class DBSWSecureStorageServiceImplementation
     try {
       _storage = const FlutterSecureStorage(
         iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
-        aOptions: AndroidOptions(encryptedSharedPreferences: true),
+        aOptions: AndroidOptions(),
         mOptions: MacOsOptions(
           accessibility: KeychainAccessibility.first_unlock,
         ),
@@ -33,23 +33,23 @@ class DBSWSecureStorageServiceImplementation
       _isInitialized = true;
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: 'Failed to initialize secure storage: $e');
+      throw DatabaseBridgeException(error: 'Failed to initialize secure storage: $e');
     }
   }
 
   @override
   Future<void> write(String key, String value) async {
     if (key.isEmpty) {
-      throw DBSWException(error: 'Key cannot be empty');
+      throw DatabaseBridgeException(error: 'Key cannot be empty');
     }
     if (value.isEmpty) {
-      throw DBSWException(error: 'Value cannot be empty');
+      throw DatabaseBridgeException(error: 'Value cannot be empty');
     }
 
     try {
       await _getStorage.write(key: key, value: value);
     } catch (e) {
-      throw DBSWException(
+      throw DatabaseBridgeException(
         error: 'Failed to write secure data for key "$key": $e',
       );
     }
@@ -58,15 +58,15 @@ class DBSWSecureStorageServiceImplementation
   @override
   Future<void> writeBatch(Map<String, String> data) async {
     if (data.isEmpty) {
-      throw DBSWException(error: 'Data map cannot be empty');
+      throw DatabaseBridgeException(error: 'Data map cannot be empty');
     }
 
     for (final entry in data.entries) {
       if (entry.key.isEmpty) {
-        throw DBSWException(error: 'Key cannot be empty');
+        throw DatabaseBridgeException(error: 'Key cannot be empty');
       }
       if (entry.value.isEmpty) {
-        throw DBSWException(
+        throw DatabaseBridgeException(
           error: 'Value cannot be empty for key "${entry.key}"',
         );
       }
@@ -77,21 +77,21 @@ class DBSWSecureStorageServiceImplementation
         await _getStorage.write(key: entry.key, value: entry.value);
       }
     } catch (e) {
-      throw DBSWException(error: 'Failed to write batch data: $e');
+      throw DatabaseBridgeException(error: 'Failed to write batch data: $e');
     }
   }
 
   @override
   Future<String?> read(String key) async {
     if (key.isEmpty) {
-      throw DBSWException(error: 'Key cannot be empty');
+      throw DatabaseBridgeException(error: 'Key cannot be empty');
     }
 
     try {
       final result = await _getStorage.read(key: key);
       return result;
     } catch (e) {
-      throw DBSWException(
+      throw DatabaseBridgeException(
         error: 'Failed to read secure data for key "$key": $e',
       );
     }
@@ -100,14 +100,14 @@ class DBSWSecureStorageServiceImplementation
   @override
   Future<bool> containsKey(String key) async {
     if (key.isEmpty) {
-      throw DBSWException(error: 'Key cannot be empty');
+      throw DatabaseBridgeException(error: 'Key cannot be empty');
     }
 
     try {
       final result = await _getStorage.containsKey(key: key);
       return result;
     } catch (e) {
-      throw DBSWException(
+      throw DatabaseBridgeException(
         error: 'Failed to check key existence for "$key": $e',
       );
     }
@@ -119,7 +119,7 @@ class DBSWSecureStorageServiceImplementation
       final result = await _getStorage.readAll();
       return result;
     } catch (e) {
-      throw DBSWException(error: 'Failed to read all secure data: $e');
+      throw DatabaseBridgeException(error: 'Failed to read all secure data: $e');
     }
   }
 
@@ -129,20 +129,20 @@ class DBSWSecureStorageServiceImplementation
       final data = await _getStorage.readAll();
       return data.keys.toList();
     } catch (e) {
-      throw DBSWException(error: 'Failed to get keys: $e');
+      throw DatabaseBridgeException(error: 'Failed to get keys: $e');
     }
   }
 
   @override
   Future<void> delete(String key) async {
     if (key.isEmpty) {
-      throw DBSWException(error: 'Key cannot be empty');
+      throw DatabaseBridgeException(error: 'Key cannot be empty');
     }
 
     try {
       await _getStorage.delete(key: key);
     } catch (e) {
-      throw DBSWException(
+      throw DatabaseBridgeException(
         error: 'Failed to delete secure data for key "$key": $e',
       );
     }
@@ -153,7 +153,7 @@ class DBSWSecureStorageServiceImplementation
     try {
       await _getStorage.deleteAll();
     } catch (e) {
-      throw DBSWException(error: 'Failed to delete all secure data: $e');
+      throw DatabaseBridgeException(error: 'Failed to delete all secure data: $e');
     }
   }
 

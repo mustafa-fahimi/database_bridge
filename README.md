@@ -1,6 +1,6 @@
-# Database Service Wrapper
+# Database Bridge
 
-[![pub package](https://img.shields.io/pub/v/database_service_wrapper.svg)](https://pub.dev/packages/database_service_wrapper)
+[![pub package](https://img.shields.io/pub/v/database_bridge.svg)](https://pub.dev/packages/database_bridge)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A unified Flutter database service wrapper that provides a consistent API for various database solutions, including SQL databases (Drift, Sqflite), NoSQL databases (Hive, ObjectBox), and secure storage.
@@ -33,7 +33,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  database_service_wrapper: ^1.0.0
+  database_bridge: ^1.0.0
 ```
 
 Then run:
@@ -47,10 +47,10 @@ flutter pub get
 ### Hive Example
 
 ```dart
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 
 // Create service instance
-final hiveService = DBSWHiveServiceImplementation();
+final hiveService = DatabaseBridgeHiveServiceImplementation();
 
 // Initialize database
 await hiveService.initializeDatabase();
@@ -68,10 +68,10 @@ await hiveService.closeDatabase();
 ### Sqflite Example
 
 ```dart
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 
 // Create service instance
-final sqliteService = DBSWSqfliteServiceImplementation();
+final sqliteService = DatabaseBridgeSqfliteServiceImplementation();
 
 // Open database
 await sqliteService.openSqliteDatabase(
@@ -103,10 +103,10 @@ await sqliteService.closeSqliteDatabase();
 ### Secure Storage Example
 
 ```dart
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 
 // Create service instance
-final secureService = DBSWSecureStorageServiceImplementation();
+final secureService = DatabaseBridgeSecureStorageServiceImplementation();
 
 // Write secure data
 await secureService.write('auth_token', 'your_jwt_token');
@@ -138,12 +138,12 @@ All services implement consistent interfaces with common operations:
 
 ## Error Handling
 
-The package provides comprehensive error handling through `DBSWException`:
+The package provides comprehensive error handling through `DatabaseBridgeException`:
 
 ```dart
 try {
   await service.write('box', 'key', 'value');
-} on DBSWException catch (e) {
+} on DatabaseBridgeException catch (e) {
   print('Database error: ${e.message}');
 } catch (e) {
   print('Unexpected error: $e');
@@ -164,4 +164,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-For more detailed documentation and examples, visit the [pub.dev page](https://pub.dev/packages/database_service_wrapper).
+For more detailed documentation and examples, visit the [pub.dev page](https://pub.dev/packages/database_bridge).

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 import 'package:sqflite/sqflite.dart';
 
 typedef SqfliteBatch = Batch;
@@ -8,8 +8,7 @@ typedef OnCreate = FutureOr<void> Function(Database, int)?;
 typedef OnUpgrade = FutureOr<void> Function(Database, int, int)?;
 typedef OnDowngrade = FutureOr<void> Function(Database, int, int)?;
 
-abstract interface class DBSWSqfliteService {
-  const DBSWSqfliteService();
+abstract interface class DatabaseBridgeSqfliteService {
 
   Future<JobDone> openSqliteDatabase({
     int databaseVersion = 1,

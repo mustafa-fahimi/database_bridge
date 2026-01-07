@@ -1,8 +1,7 @@
-import 'package:database_service_wrapper/common/job_done.dart';
+import 'package:database_bridge/common/job_done.dart';
 import 'package:objectbox/objectbox.dart';
 
-abstract interface class DBSWObjectboxService {
-  const DBSWObjectboxService();
+abstract interface class DatabaseBridgeObjectboxService {
 
   Future<JobDone> initializeStore();
 

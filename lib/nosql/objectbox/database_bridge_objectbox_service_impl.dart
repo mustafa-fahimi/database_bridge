@@ -1,15 +1,16 @@
 import 'dart:io';
 
-import 'package:database_service_wrapper/common/d_b_s_w_exception.dart';
-import 'package:database_service_wrapper/common/job_done.dart';
+import 'package:database_bridge/common/database_bridge_exception.dart';
+import 'package:database_bridge/common/job_done.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import 'd_b_s_w_objectbox_service.dart';
+import 'database_bridge_objectbox_service.dart';
 
-class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
-  DBSWObjectboxServiceImplementation({this.storeDirectory, this.storeFactory});
+class DatabaseBridgeObjectboxServiceImpl
+    implements DatabaseBridgeObjectboxService {
+  DatabaseBridgeObjectboxServiceImpl({this.storeDirectory, this.storeFactory});
 
   final Directory? storeDirectory;
   final Future<Store> Function(String directory)? storeFactory;
@@ -26,7 +27,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       }
 
       if (storeFactory == null) {
-        throw const DBSWException(
+        throw const DatabaseBridgeException(
           error:
               'Store factory is required. Please provide a store factory function that returns a Store instance.',
         );
@@ -37,7 +38,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
 
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -66,13 +67,13 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       }
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
   void _ensureStoreInitialized() {
     if (_store == null) {
-      throw const DBSWException(
+      throw const DatabaseBridgeException(
         error: 'Store not initialized. Call initializeStore() first.',
       );
     }
@@ -85,7 +86,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.get(id);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -96,7 +97,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.getAll();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -107,7 +108,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.put(object);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -118,7 +119,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.putMany(objects);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -129,7 +130,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.remove(id);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -140,7 +141,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.removeMany(ids);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -151,7 +152,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.removeAll();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -162,7 +163,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.contains(id);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -173,7 +174,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final box = _store!.box<T>();
       return box.count();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -197,7 +198,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final query = queryBuilder.build();
       return query.find();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -219,7 +220,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final query = queryBuilder.build();
       return query.findFirst();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -231,7 +232,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       final query = box.query(condition).build();
       return query.count();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -241,7 +242,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       _ensureStoreInitialized();
       return _store!.runInTransaction(TxMode.write, action);
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -249,21 +250,21 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
   Future<JobDone> clearAllData() async {
     try {
       _ensureStoreInitialized();
-      
+
       final storeDirectory = await _getStoreDirectory();
-      
+
       _store!.close();
       _store = null;
-      
+
       Store.removeDbFiles(storeDirectory.path);
-      
+
       if (storeFactory != null) {
         _store = await storeFactory!(storeDirectory.path);
       }
-      
+
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 
@@ -277,7 +278,7 @@ class DBSWObjectboxServiceImplementation implements DBSWObjectboxService {
       });
       return const JobDone();
     } catch (e) {
-      throw DBSWException(error: e);
+      throw DatabaseBridgeException(error: e);
     }
   }
 

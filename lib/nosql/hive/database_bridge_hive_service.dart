@@ -1,8 +1,7 @@
-import 'package:database_service_wrapper/database_service_wrapper.dart';
+import 'package:database_bridge/database_bridge.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-abstract interface class DBSWHiveService {
-  const DBSWHiveService();
+abstract interface class DatabaseBridgeHiveService {
 
   Future<JobDone> initializeDatabase();
 
