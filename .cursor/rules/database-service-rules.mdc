@@ -1,8 +1,0 @@
----
-globs: *
-alwaysApply: false
----
-This is a Flutter library project. It's a database broker that provides a unified interface for various databases.
-
-Rules:
-- Do not add any comment in the suggested or generated code unless I ask for it.
